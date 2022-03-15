@@ -1,6 +1,25 @@
 # ArgoCD and Team Topologies
 
-Aligning how we setup our GitOps tooling deployment with the structure of our team's is a tricky job, especially when it comes to permissions, RBAC on OpenShift and some of the default's that the RedHat `gitops-operator` set for us. This README discusses how we can use the `redhat-cop/gitops-operator` chart to better align our deployments with our teams.
+Aligning how we can setup our GitOps tooling so that it fits with out team structure is a tricky job, especially when it comes to RBAC, permissions and some of the default's that the RedHat `gitops-operator` set for us. This README discusses how we can use the `redhat-cop/gitops-operator` chart to better align our deployments with our teams.
+
+## Table of Content
+- [ArgoCD and Team Topologies](./README.md#argocd-and-team-topologies)
+  * [Table of Content](./README.md#table-of-content)
+  * [Introduction](./README.md#introduction)
+  * [Background on OpenShift GitOps Operator and RBAC](./README.md#background-on-openshift-gitops-operator-and-rbac)
+  * [redhat-cop/gitops-operator Helm Chart](./README.md#redhat-copgitops-operator-helm-chart)
+  * [Common Patterns of Deployment](./README.md#common-patterns-of-deployment)
+    + [Helm Setup & Bootstrap Projects](./README.md#helm-setup--bootstrap-projects)
+    + [Cluster ArgoCD for Everyone](./README.md#cluster-argocd-for-everyone)
+    + [Don't deploy Platform ArgoCD, Cluster ArgoCD per Team](./README.md#dont-deploy-platform-argocd-cluster-argocd-per-team)
+    + [Platform ArgoCD, Namespaced ArgoCD per Team](./README.md#platform-argocd-namespaced-argocd-per-team)
+    + [Don't deploy Platform ArgoCD, Namespaced ArgoCD per Team](./README.md#dont-deploy-platform-argocd-namespaced-argocd-per-team)
+    + [One ArgoCD To Rule Them All](./README.md#one-argocd-to-rule-them-all)
+    + [Using Custom RBAC for Team ArgoCD](./README.md#using-custom-rbac-for-team-argocd)
+    + [Namespaced ArgoCD and Creating projects/namespaces](./README.md#namespaced-argocd-and-creating-projectsnamespaces)
+  * [Cleanup](./README.md#cleanup)
+
+## Introduction
 
 In [Team Topologies](https://teamtopologies.com/) the `Product Team` is a stream aligned team that focusses on application(s) that compose a business service.
 
