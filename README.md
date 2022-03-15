@@ -161,7 +161,7 @@ In this pattern there is a `cluster scoped` ArgoCD instance that the `Platform T
 - The RedHat GitOps Operator (cluster scoped)
 - A Ops-SRE (cluster scoped) ArgoCD instance
 
-We then deploy a chart for the:
+We then use a helm chart that deploys:
 
 - Team (cluster scoped) ArgoCD instances
 
@@ -203,7 +203,7 @@ In this pattern the ops-sre instance is not required.
 
 ![images/cluster-argo-per-team.png](images/cluster-argo-per-team.png)
 
-We then deploy a chart for the:
+We then use a helm chart that deploys:
 
 - The RedHat GitOps Operator (cluster scoped)
 - Team (cluster scoped) ArgoCD instances
@@ -296,7 +296,7 @@ In this pattern the ops-sre instance is not required.
 
 ![images/namespaced-team-argo.png](images/namespaced-team-argo.png)
 
-We then deploy a chart for the:
+We then use a helm chart that deploys:
 
 - The RedHat GitOps Operator (cluster scoped)
 - Team (namespaces scoped) ArgoCD instances
