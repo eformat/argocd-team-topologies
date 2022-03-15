@@ -29,13 +29,22 @@ You can tell if your ArgoCD instance is able to see `All namespaces` in the clus
 
 _Namespaced Scoped ArgoCD_
 
-As a normal user (project admin), when you deploy ArgoCD using the operator, your cluster connection is `namespaced`. This means that your ArgoCD can only control objects listed in the comma separated list of  `NAMESPACES` against the cluster connection. It cannot access cluster resources i.e. it cannot create `projects`. For example, the `zteam-ci-cd` ArgoCD instance:
+As a normal team user (a project admin), when you deploy ArgoCD using the operator, your cluster connection is `namespaced`. This means that your ArgoCD can only control objects listed in the comma separated list of  `NAMESPACES` against the cluster connection. Your ArgoCD cannot access cluster resources i.e. for example it cannot create `projects or namespaces`. For example, the `zteam-ci-cd` ArgoCD instance in `namespaced` mode:
 
 ![images/team-namespaced-argocd.png](images/team-namespaced-argocd.png)
 
 ## eformat/gitops-operator Helm Chart
 
-We have created a helm chart that allows finer grained control of our team based ArgoCD instances. In particular, it allows us to configure the `gitops-operator` Subscription so that we may deploy cluster scoped team instances of ArgoCD as well as provide finer grained RBAC control e.g. full `cluster-admin`, or just a subset of Role rules.
+We have created a helm chart that allows finer grained control of our team based ArgoCD instances. In particular, it allows us to configure the `gitops-operator` Subscription so that we may deploy cluster scoped team instances of ArgoCD as well as provide finer grained RBAC control e.g. full `cluster-admin`, or just a subset of Role rules. We can control the cluster connection mode as whether to deploy a default ArgoCD instance by manipulating the environment variables set on the `gitops-operator` Subscription:
+
+```yaml
+  config:
+    env:
+      - name: DISABLE_DEFAULT_ARGOCD_INSTANCE
+        value: 'true'
+      - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
+        value: 'xteam-ci-cd,yteam-ci-cd,zteam-ci-cd'
+```
 
 ## Common Patterns of Deployment
 
@@ -55,7 +64,7 @@ There are four teams in the examples:
 - `ops-sre` - this is the platform team. they operate at cluster scope and use the ArgoCD in the `openshift-gitops` namespace.
 - `xteam, yteam, zteam` - these are our stream aligned product teams. they operate at cluster or namespaced scope and use ArgoCD in their `*-ci-cd` namespace.
 
-There are many ways to create the team projects. `oc new-project` works as well. We make use of the [bootstrap project chart](https://github.com/redhat-cop/helm-charts/tree/master/charts/bootstrap-project) in the redhat-cop which manages role bindings for our teams. The groups would come from LDAP/OAuth providers and be provisioned on OpenShift already.
+There are many ways to create the team projects. `oc new-project` works well!. We can make use of the [bootstrap project chart](https://github.com/redhat-cop/helm-charts/tree/master/charts/bootstrap-project) in the redhat-cop that manages the role bindings and namespaces for our teams. In a normal setup the Groups would come from LDAP/OAuth providers and be provisioned on OpenShift already.
 
 Let's create the projects configurations:
 
@@ -97,7 +106,7 @@ serviceaccounts:
 EOF
 ```
 
-There are multiple ways to deploy the helm chart - we could just install it in our cluster:
+There are multiple ways to deploy the helm chart - just install it in our cluster (do this for now):
 
 ```bash
 # bootstrap our projects
@@ -107,7 +116,7 @@ helm upgrade --install bootstrap \
   --namespace argocd --create-namespace
 ```
 
-Else we could use a cluster-scope ArgoCD instance and an `Application`:
+else we could use a cluster-scope ArgoCD instance and an `Application` if that existed already:
 
 ```bash
 # bootstrap namespaces using ops-sre argo instance
@@ -139,11 +148,9 @@ $(sed 's/^/        /' /tmp/bootstrap-values.yaml)
 EOF
 ```
 
-You can choose which option suits !
+**NOTE** You must deploy these namespaces first for each of the examples below.
 
-**NOTE** You must deploy the namespaces first for each example below.
-
-It may also be desireable for the teams to own the creation of namespaces which we will cover along the way.
+It may also be desireable for the teams to own the creation of namespaces which is not covered here, however that is easily done by altering the methods above.
 
 ### Cluster ArgoCD for Everyone
 
@@ -164,6 +171,8 @@ This pattern is useful when:
 
 - High Trust - Teams are trusted at the cluster scope
 - A level of isolation is required hence each team get their own ArgoCD instance
+
+Deploy the team bootstrap namespaces as above.
 
 Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy an ops-sre (cluster scoped) ArgoCD, and then deploy three team (cluster scoped) ArgoCD instances.
 
@@ -207,6 +216,8 @@ This pattern is useful when:
 - A level of isolation is required hence each team get their own ArgoCD instance
 - Teams can self-administer their ArgoCD with little assistance from Ops-SRE
 
+Deploy the team bootstrap namespaces as above.
+
 Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
 
 ```bash
@@ -246,6 +257,8 @@ This pattern is useful when:
 
 - Medium Trust - Teams are trusted to admin their own namespaces which are provisioned for them by the platform team.
 - A level of isolation is required hence each team get their own ArgoCD instance
+
+Deploy the team bootstrap namespaces as above.
 
 Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy an ops-sre (cluster scoped) ArgoCD, and then deploy three team (cluster scoped) ArgoCD instances.
 
@@ -294,6 +307,8 @@ This pattern is useful when:
 
 - Medium Trust - Teams are trusted to admin their own namespaces which are provisioned for them by the platform team.
 - A level of isolation is required hence each team get their own ArgoCD instance
+
+Deploy the team bootstrap namespaces as above.
 
 Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
 
@@ -367,6 +382,8 @@ clusterRoleRulesController:
 $(sed 's/^/  /' controller-cluster-rbac-rules.yaml)
 EOF
 ```
+
+Deploy the team bootstrap namespaces as above.
 
 Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
 
