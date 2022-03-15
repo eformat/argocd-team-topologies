@@ -74,8 +74,8 @@ Let's examine some common patterns of deployment with different trade offs in te
 In the examples that follow we use the following helm chart repository. Add it now to your local config:
 
 ```bash
-# add the eformat repository
-helm repo add eformat https://eformat.github.io/helm-charts
+# add the redhat-cop repository
+helm repo add redhat-cop https://redhat-cop.github.io/helm-charts
 ```
 
 There are four teams in the examples:
@@ -190,12 +190,12 @@ This pattern is useful when:
 
 Deploy the team bootstrap namespaces as above.
 
-Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy an ops-sre (cluster scoped) ArgoCD, and then deploy three team (cluster scoped) ArgoCD instances.
+Using a `cluster-admin` user, use helm and the `redhat-cop/gitops-operator` chart to deploy an ops-sre (cluster scoped) ArgoCD, and then deploy three team (cluster scoped) ArgoCD instances.
 
 ```bash
 # argocd operator in openshift-operators ns. ops-sre argocd instance in openshift-gitops ns. helm chart in argocd ns. no team argos.
 helm upgrade --install argocd \
-  eformat/gitops-operator \
+  redhat-cop/gitops-operator \
   --set operator.disableDefaultArgoCD=false \
   --set namespaces={'xteam-ci-cd,yteam-ci-cd,zteam-ci-cd'} \
   --namespace argocd --create-namespace
@@ -234,12 +234,12 @@ This pattern is useful when:
 
 Deploy the team bootstrap namespaces as above.
 
-Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
+Using a `cluster-admin` user, use helm and the `redhat-cop/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
 
 ```bash
 # deploy the operator, and team instances
 helm upgrade --install teams-argocd \
-  eformat/gitops-operator \
+  redhat-cop/gitops-operator \
   --set namespaces={"xteam-ci-cd,yteam-ci-cd,zteam-ci-cd"} \
   --namespace argocd
 ```
@@ -276,12 +276,12 @@ This pattern is useful when:
 
 Deploy the team bootstrap namespaces as above.
 
-Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy an ops-sre (cluster scoped) ArgoCD, and then deploy three team (cluster scoped) ArgoCD instances.
+Using a `cluster-admin` user, use helm and the `redhat-cop/gitops-operator` chart to deploy an ops-sre (cluster scoped) ArgoCD, and then deploy three team (cluster scoped) ArgoCD instances.
 
 ```bash
 # deploy the operator, ops-sre instance, namespaced scoped team instances
 helm upgrade --install argocd \
-  eformat/gitops-operator \
+  redhat-cop/gitops-operator \
   --set operator.disableDefaultArgoCD=false \
   --set namespaces={"xteam-ci-cd,yteam-ci-cd,zteam-ci-cd"} \
   --set teamInstancesAreClusterScoped=false \
@@ -326,12 +326,12 @@ This pattern is useful when:
 
 Deploy the team bootstrap namespaces as above.
 
-Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
+Using a `cluster-admin` user, use helm and the `redhat-cop/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
 
 ```bash
 # deploy the operator, namespaced scoped team instances
 helm upgrade --install argocd \
-  eformat/gitops-operator \
+  redhat-cop/gitops-operator \
   --set namespaces={"xteam-ci-cd,yteam-ci-cd,zteam-ci-cd"} \
   --set teamInstancesAreClusterScoped=false \
   --namespace argocd --create-namespace
@@ -368,12 +368,12 @@ This pattern is useful when:
 - High Trust - everyone shares one privileged ArgoCD instance.
 - No isolation required
 
-Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy one (cluster scoped) ArgoCD instance.
+Using a `cluster-admin` user, use helm and the `redhat-cop/gitops-operator` chart to deploy one (cluster scoped) ArgoCD instance.
 
 ```bash
 # deploy the operator, cluster scoped ops-sre instance
 helm upgrade --install argocd \
-  eformat/gitops-operator \
+  redhat-cop/gitops-operator \
   --set namespaces= \
   --set operator.disableDefaultArgoCD=false \
   --namespace argocd --create-namespace
@@ -428,12 +428,12 @@ EOF
 
 Deploy the team bootstrap namespaces as above.
 
-Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
+Using a `cluster-admin` user, use helm and the `redhat-cop/gitops-operator` chart to deploy three team (cluster scoped) ArgoCD instances.
 
 ```bash
 # deploy the operator, namespaced scoped team instances
 helm upgrade --install argocd \
-  eformat/gitops-operator \
+  redhat-cop/gitops-operator \
   -f /tmp/custom-values.yaml \
   --namespace argocd --create-namespace
 ```
