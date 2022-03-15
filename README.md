@@ -273,7 +273,7 @@ In this pattern there is a `cluster scoped` ArgoCD instance that the `Platform T
 - A Ops-SRE (cluster scoped) ArgoCD instance
 - Team (namespaces scoped) ArgoCD instances
 
-Individual teams can then use their cluster scoped ArgoCD to deploy their applications, middleware and tooling, but `cannot deploy cluster-scoped` resources e.g. teams cannot deploy `namespaces or projects or operators` as they require cluster scoped privilege.
+Individual teams can then use their namespace scoped ArgoCD to deploy their applications, middleware and tooling, but `cannot deploy cluster-scoped` resources e.g. teams cannot deploy `namespaces or projects or operators` as they require cluster scoped privilege.
 
 This pattern is useful when:
 
