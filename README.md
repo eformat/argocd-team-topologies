@@ -461,21 +461,23 @@ OpenShift by default allows normal authenticated users to create projects in a s
 
 ## Cleanup
 
-Use to `Nuke from orbit`:
+To quickly remove everything between exercise deployments i use this to `Nuke from orbit`:
 
 ```bash
 helm delete argocd -n argocd
 helm delete bootstrap -n argocd
-oc delete project argocd
-project-finalize.sh argocd
 oc delete csv openshift-gitops-operator.v1.4.3 -n openshift-operators
 oc patch argocds.argoproj.io argocd -n xteam-ci-cd --type='json' -p='[{"op": "remove" , "path": "/metadata/finalizers" }]'
 oc patch argocds.argoproj.io argocd -n yteam-ci-cd --type='json' -p='[{"op": "remove" , "path": "/metadata/finalizers" }]'
 oc patch argocds.argoproj.io argocd -n zteam-ci-cd --type='json' -p='[{"op": "remove" , "path": "/metadata/finalizers" }]'
 oc patch argocds.argoproj.io openshift-gitops -n openshift-gitops --type='json' -p='[{"op": "remove" , "path": "/metadata/finalizers" }]'
+oc delete project argocd
 oc delete project openshift-gitops
+project-finalize.sh argocd
 project-finalize.sh openshift-gitops
 project-finalize.sh xteam-ci-cd
 project-finalize.sh yteam-ci-cd
 project-finalize.sh zteam-ci-cd
 ```
+
+In the _ideal_ world, finalizers would work as expected.
