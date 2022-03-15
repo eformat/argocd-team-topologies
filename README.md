@@ -160,9 +160,6 @@ In this pattern there is a `cluster scoped` ArgoCD instance that the `Platform T
 
 - The RedHat GitOps Operator (cluster scoped)
 - A Ops-SRE (cluster scoped) ArgoCD instance
-
-We then use a helm chart that deploys:
-
 - Team (cluster scoped) ArgoCD instances
 
 Individual teams can then use their cluster scoped ArgoCD to deploy their applications, middleware and tooling.
