@@ -405,6 +405,8 @@ OpenShift by default allows normal authenticated users to create projects in a s
 
 ## Cleanup
 
+Use to `Nuke from orbit`:
+
 ```bash
 helm delete argocd -n argocd
 helm delete bootstrap -n argocd
