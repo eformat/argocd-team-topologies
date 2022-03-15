@@ -342,7 +342,7 @@ We use a helm chart that deploys:
 - The RedHat GitOps Operator (cluster scoped)
 - A Ops-SRE (cluster scoped) ArgoCD instance
 
-Everyone will need to be given access to the `openshift-gitops` namespace.
+Everyone will need to be given `edit` access to the `openshift-gitops` namespace.
 
 This pattern is useful when:
 
@@ -358,6 +358,13 @@ helm upgrade --install argocd \
   --set namespaces= \
   --set operator.disableDefaultArgoCD=false \
   --namespace argocd --create-namespace
+```
+
+```bash
+oc get argocd --all-namespaces
+
+NAMESPACE          NAME               AGE
+openshift-gitops   openshift-gitops   20s
 ```
 
 ### Using Custom RBAC for Team ArgoCD
