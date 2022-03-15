@@ -200,7 +200,7 @@ In this pattern the ops-sre instance is not required.
 
 ![images/cluster-argo-per-team.png](images/cluster-argo-per-team.png)
 
-We then use a helm chart that deploys:
+We use a helm chart that deploys:
 
 - The RedHat GitOps Operator (cluster scoped)
 - Team (cluster scoped) ArgoCD instances
@@ -293,7 +293,7 @@ In this pattern the ops-sre instance is not required.
 
 ![images/namespaced-team-argo.png](images/namespaced-team-argo.png)
 
-We then use a helm chart that deploys:
+We use a helm chart that deploys:
 
 - The RedHat GitOps Operator (cluster scoped)
 - Team (namespaces scoped) ArgoCD instances
@@ -333,11 +333,31 @@ The thing to note with the team ArgoCD's is their `cluster` connection is namesp
 
 ### One ArgoCD To Rule Them All
 
+In this pattern the ops-sre instance is the only one deployed.
+
 ![images/one-argo-to-rule-them-all.png](images/one-argo-to-rule-them-all.png)
 
+We use a helm chart that deploys:
+
+- The RedHat GitOps Operator (cluster scoped)
+- A Ops-SRE (cluster scoped) ArgoCD instance
+
+Everyone will need to be given access to the `openshift-gitops` namespace.
+
+This pattern is useful when:
+
+- High Trust - everyone shares one privileged ArgoCD instance.
+- No isolation required
+
+Using a `cluster-admin` user, use helm and the `eformat/gitops-operator` chart to deploy one (cluster scoped) ArgoCD instance.
+
 ```bash
-# add the eformat repository
-helm repo add eformat https://eformat.github.io/helm-charts
+# deploy the operator, cluster scoped ops-sre instance
+helm upgrade --install argocd \
+  eformat/gitops-operator \
+  --set namespaces= \
+  --set operator.disableDefaultArgoCD=false \
+  --namespace argocd --create-namespace
 ```
 
 ### Using Custom RBAC for Team ArgoCD
