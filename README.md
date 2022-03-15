@@ -33,7 +33,7 @@ As a normal team user (a project admin), when you deploy ArgoCD using the operat
 
 ![images/team-namespaced-argocd.png](images/team-namespaced-argocd.png)
 
-## eformat/gitops-operator Helm Chart
+## redhat-cop/gitops-operator Helm Chart
 
 We have created a helm chart that allows finer grained control of our team based ArgoCD instances. In particular, it allows us to configure the `gitops-operator` Subscription so that we may deploy cluster scoped team instances of ArgoCD as well as provide finer grained RBAC control e.g. full `cluster-admin`, or just a subset of Role rules. We can control the cluster connection mode as whether to deploy a default ArgoCD instance by manipulating the environment variables set on the `gitops-operator` Subscription:
 
